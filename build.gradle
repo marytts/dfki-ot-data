@@ -27,3 +27,19 @@ task soxi << {
     file('soxi.yaml').text = yaml.dump(data)
 }
 
+task offsets(type: Exec) {
+    def scriptFile = file("$rootDir/offsets.praat")
+    commandLine 'praat', '--run', scriptFile
+    doFirst {
+        def dir1 = 'wav_44K'
+        def dir2 = 'wav'
+        def fileSet = fileTree(dir1).include('*.wav').collect {
+            it.name
+        }.intersect(fileTree(dir2).include('*.wav').collect { it.name })
+        def list1File = file("$temporaryDir/wav1.lst")
+        list1File.text = fileSet.collect { file("$dir1/$it") }.join('\n')
+        def list2File = file("$temporaryDir/wav2.lst")
+        list2File.text = fileSet.collect { file("$dir2/$it") }.join('\n')
+        commandLine += [list1File, list2File]
+    }
+}
