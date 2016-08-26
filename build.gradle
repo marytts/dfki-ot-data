@@ -1,2 +1,14 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.17'
+    }
+}
+
 group 'de.dfki.mary'
 version '0.1-SNAPSHOT'
+
+import org.yaml.snakeyaml.*
+
