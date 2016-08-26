@@ -1,5 +1,5 @@
 group 'de.dfki.mary'
-version '0.1-SNAPSHOT'
+version '0.1'
 description 'Speech database for the OT Turkish TTS voices in MaryTTS'
 
 ext {
