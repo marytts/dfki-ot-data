@@ -12,3 +12,18 @@ version '0.1-SNAPSHOT'
 
 import org.yaml.snakeyaml.*
 
+task soxi << {
+    def options = new DumperOptions()
+    options.defaultFlowStyle = DumperOptions.FlowStyle.BLOCK
+    def yaml = new Yaml(options)
+    def data = [:]
+    fileTree('wav_44K').include('*.wav').each { wavFile ->
+        def soxi = "soxi $wavFile".execute()
+        soxi.waitFor()
+        def basename = wavFile.name - '.wav'
+        def info = yaml.load(soxi.text)
+        data[basename] = info
+    }
+    file('soxi.yaml').text = yaml.dump(data)
+}
+
