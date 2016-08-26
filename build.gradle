@@ -1,2 +1,22 @@
 group 'de.dfki.mary'
 version '0.1-SNAPSHOT'
+description 'Speech database for the OT Turkish TTS voices in MaryTTS'
+
+ext {
+    yamlFile = file("${project.name}.yaml")
+    flacFile = file("$buildDir/${project.name}.flac")
+}
+
+task extractText(type: ExtractText, description: "Extract text files to $buildDir.name/text")
+
+task extractLab(type: ExtractLab, description: "Extract label files to $buildDir.name/lab")
+
+task extractTextGrid(type: ExtractTextGrid, description: "Generate Praat TextGrid")
+
+task downloadAudio(type: DownloadAudio, description: "Download audio file to $buildDir.name/$flacFile.name")
+
+task extractWav(type: ExtractWav, description: "Extract audio files to $buildDir.name/wav", dependsOn: downloadAudio)
+
+task clean(description: 'Delete the build directory') << {
+    delete fileTree(buildDir).exclude(flacFile.name)
+}
