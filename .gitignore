@@ -8,3 +8,9 @@ build/
 
 # OSX
 .DS_Store
+
+# data resources
+lab/
+text/
+wav/
+wav_44K/
