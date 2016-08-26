@@ -73,7 +73,7 @@ task yaml << {
                 xmin = xmax
             }
         }
-        [prompt: prompt, text: text, start: start, end: end, segments: segments]
+        [prompt: prompt, text: text, date: new Date(wavFile.lastModified()), start: start, end: end, segments: segments]
     }
     yamlFile.text = yaml.dump(data)
 }
