@@ -77,3 +77,16 @@ task yaml << {
     }
     yamlFile.text = yaml.dump(data)
 }
+
+task flac << {
+    def yamlFile = file("${project.name}.yaml")
+    def listFile = file('wav.lst')
+    listFile.withWriter { writer ->
+        new Yaml().load(yamlFile.text).each {
+            writer.println "file 'wav_44K/${it.prompt}.wav'"
+        }
+    }
+    exec {
+        commandLine 'ffmpeg', '-f', 'concat', '-i', listFile, '-acodec', 'flac', '-compression_level', 12, "${project.name}.flac"
+    }
+}
