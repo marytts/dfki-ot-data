@@ -43,3 +43,37 @@ task offsets(type: Exec) {
         commandLine += [list1File, list2File]
     }
 }
+
+task yaml << {
+    def options = new DumperOptions()
+    options.defaultFlowStyle = DumperOptions.FlowStyle.BLOCK
+    def yaml = new Yaml(options)
+    def yamlFile = file("${project.name}.yaml")
+    def soxi = yaml.load(file('soxi.yaml').text)
+    def offsets = yaml.load(file('offsets.yaml').text)
+    def end = 0.0
+    def data = fileTree('wav_44K').include('*.wav').toSorted().collect { wavFile ->
+        def prompt = wavFile.name - '.wav'
+        def text = file("text/${prompt}.txt").text.trim()
+        def start = end
+        def durationString = soxi[prompt].Duration
+        def samples = durationString.tokenize()[2] as BigDecimal
+        def sampleRate = soxi[prompt].'Sample Rate' as BigDecimal
+        def duration = samples / sampleRate
+        end += duration
+        def offset = offsets[prompt] as BigDecimal
+        def segments = []
+        def xmin = -offset
+        file("lab/${prompt}.lab").eachLine { line ->
+            def fields = line.split(/\s/, 3)
+            if (fields.length == 3) {
+                def xmax = fields[0] as float
+                def dur = xmax - xmin
+                segments << [lab: fields[2], dur: dur.round(6)]
+                xmin = xmax
+            }
+        }
+        [prompt: prompt, text: text, start: start, end: end, segments: segments]
+    }
+    yamlFile.text = yaml.dump(data)
+}
