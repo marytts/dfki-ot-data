@@ -1,3 +1,7 @@
+plugins {
+    id 'org.m2ci.msp.flaml' version '0.3.0'
+}
+
 group 'de.dfki.mary'
 version '0.2-SNAPSHOT'
 description 'Speech database for the OT Turkish TTS voices in MaryTTS'
@@ -11,14 +15,6 @@ task extractText(type: ExtractText, description: "Extract text files to $buildDi
 
 task extractLab(type: ExtractLab, description: "Extract label files to $buildDir.name/lab")
 
-task extractTextGrid(type: ExtractTextGrid, description: "Generate Praat TextGrid")
-
 task downloadAudio(type: DownloadAudio, description: "Download audio file to $buildDir.name/$flacFile.name")
 
 task extractWav(type: ExtractWav, description: "Extract audio files to $buildDir.name/wav", dependsOn: downloadAudio)
-
-task clean(description: 'Delete the build directory') {
-    doLast {
-        delete fileTree(buildDir).exclude(flacFile.name)
-    }
-}
