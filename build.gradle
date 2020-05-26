@@ -6,9 +6,4 @@ group 'de.dfki.mary'
 version '0.2-SNAPSHOT'
 description 'Speech database for the OT Turkish TTS voices in MaryTTS'
 
-ext {
-    yamlFile = file("${project.name}.yaml")
-    flacFile = file("$buildDir/${project.name}.flac")
-}
-
-task downloadAudio(type: DownloadAudio, description: "Download audio file to $buildDir.name/$flacFile.name")
+task downloadAudio(type: DownloadAudio)
