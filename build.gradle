@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'de.dfki.mary'
-version '0.2-SNAPSHOT'
+version '0.2-rc1'
 description 'Speech database for the OT Turkish TTS voices in MaryTTS'
 
 task downloadAudio(type: DownloadAudio)
@@ -28,6 +28,7 @@ publishing {
                 builtBy downloadAudio
             }
             descriptor {
+                status = 'milestone'
                 license {
                     name = 'Creative Commons Attribution-ShareAlike 4.0 International'
                     url = 'https://creativecommons.org/licenses/by-sa/4.0/'

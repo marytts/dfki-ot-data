@@ -1,8 +1,8 @@
 DFKI OT Data
 ============
 
-[Unreleased]
-------------
+[v0.2-rc1] (2020-05-26)
+-----------------------
 
 ### Changed
 
@@ -17,7 +17,7 @@ DFKI OT Data
 - Built with Gradle v3.0
 - Used for [voice-dfki-ot v5.2]
 
-[Unreleased]: https://github.com/marytts/dfki-ot-data/tree/master
+[v0.2-rc1]: https://github.com/marytts/dfki-ot-data/releases/tag/v0.2-rc1
 [all changes since v0.1]: https://github.com/marytts/dfki-ot-data/compare/v0.1...HEAD
 [v0.1]: https://github.com/marytts/dfki-ot-data/releases/tag/v0.1
 [voice-dfki-ot v5.2]: https://github.com/marytts/voice-dfki-ot/releases/tag/v5.2
