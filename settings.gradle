@@ -1,1 +1,2 @@
 rootProject.name = 'dfki-ot-data'
+enableFeaturePreview('STABLE_PUBLISHING')

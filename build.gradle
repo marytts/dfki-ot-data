@@ -1,5 +1,6 @@
 plugins {
     id 'org.m2ci.msp.flaml' version '0.3.0'
+    id 'ivy-publish'
 }
 
 group 'de.dfki.mary'
@@ -7,3 +8,41 @@ version '0.2-SNAPSHOT'
 description 'Speech database for the OT Turkish TTS voices in MaryTTS'
 
 task downloadAudio(type: DownloadAudio)
+
+task packageYaml(type: Zip) {
+    from flaml.yamlFile
+}
+
+artifacts {
+    'default' packageYaml
+    'default' flaml.flacFile, {
+        builtBy downloadAudio
+    }
+}
+
+publishing {
+    publications {
+        flaml(IvyPublication) {
+            artifact packageYaml
+            artifact project.flaml.flacFile, {
+                builtBy downloadAudio
+            }
+            descriptor {
+                license {
+                    name = 'Creative Commons Attribution-ShareAlike 4.0 International'
+                    url = 'https://creativecommons.org/licenses/by-sa/4.0/'
+                }
+                description {
+                    text = project.description
+                    homepage = 'https://github.com/marytts/dfki-ot-data'
+                }
+            }
+        }
+    }
+    repositories {
+        ivy {
+            name 'projectLocal'
+            url "$buildDir/repo"
+        }
+    }
+}
