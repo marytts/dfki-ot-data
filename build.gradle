@@ -1,24 +1,48 @@
+plugins {
+    id 'org.m2ci.msp.flaml' version '0.3.0'
+    id 'ivy-publish'
+}
+
 group 'de.dfki.mary'
 version '0.2-SNAPSHOT'
 description 'Speech database for the OT Turkish TTS voices in MaryTTS'
 
-ext {
-    yamlFile = file("${project.name}.yaml")
-    flacFile = file("$buildDir/${project.name}.flac")
+task downloadAudio(type: DownloadAudio)
+
+task packageYaml(type: Zip) {
+    from flaml.yamlFile
 }
 
-task extractText(type: ExtractText, description: "Extract text files to $buildDir.name/text")
+artifacts {
+    'default' packageYaml
+    'default' flaml.flacFile, {
+        builtBy downloadAudio
+    }
+}
 
-task extractLab(type: ExtractLab, description: "Extract label files to $buildDir.name/lab")
-
-task extractTextGrid(type: ExtractTextGrid, description: "Generate Praat TextGrid")
-
-task downloadAudio(type: DownloadAudio, description: "Download audio file to $buildDir.name/$flacFile.name")
-
-task extractWav(type: ExtractWav, description: "Extract audio files to $buildDir.name/wav", dependsOn: downloadAudio)
-
-task clean(description: 'Delete the build directory') {
-    doLast {
-        delete fileTree(buildDir).exclude(flacFile.name)
+publishing {
+    publications {
+        flaml(IvyPublication) {
+            artifact packageYaml
+            artifact project.flaml.flacFile, {
+                builtBy downloadAudio
+            }
+            descriptor {
+                license {
+                    name = 'Creative Commons Attribution-ShareAlike 4.0 International'
+                    url = 'https://creativecommons.org/licenses/by-sa/4.0/'
+                }
+                description {
+                    text = project.description
+                    homepage = 'https://github.com/marytts/dfki-ot-data'
+                }
+            }
+        }
+    }
+    repositories {
+        ivy {
+            name 'projectLocal'
+            url "$buildDir/repo"
+        }
     }
 }
